@@ -6,13 +6,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.javastart.weather.jsonClass.FullWeather;
-import pl.javastart.weather.jsonClass.WeatherDto;
+import pl.javastart.weather.dto.HtmlWeatherDto;
 
 @Controller
 public class WeatherController {
 
-    private OpenWeatherService openWeatherService;
+    private final OpenWeatherService openWeatherService;
 
     public WeatherController(OpenWeatherService openWeatherService) {
         this.openWeatherService = openWeatherService;
@@ -28,19 +27,18 @@ public class WeatherController {
     @PostMapping("/weather")
     String town(@RequestParam(required = false) String town, RedirectAttributes redirectAttributes,Model model) {
         try {
-            FullWeather townWeather = openWeatherService.getTownWeather(town);
-            WeatherDto townWeatherDto = openWeatherService.getWeatherDto(townWeather);
-            redirectAttributes.addFlashAttribute("townWeather", townWeatherDto);
+            HtmlWeatherDto townHtmlWeatherDto = openWeatherService.getTownWeather(town);
+            redirectAttributes.addFlashAttribute("townWeather", townHtmlWeatherDto);
             return "redirect:/result";
-        } catch (TownWeatherNotFoundException e) {
+        } catch (CityWeatherNotFoundException e) {
             model.addAttribute("TownNotFound", "TownNotFound");
             return "home";
         }
     }
 
     @GetMapping("/result")
-    String result(@ModelAttribute("townWeather") final WeatherDto weatherDto, Model model){
-        model.addAttribute("townWeather", weatherDto);
+    String result(@ModelAttribute("townWeather") final HtmlWeatherDto htmlWeatherDto, Model model){
+        model.addAttribute("townWeather", htmlWeatherDto);
         return "result";
     }
 }

@@ -1,10 +1,10 @@
 
-package pl.javastart.weather.jsonClass;
+package pl.javastart.weather.dto;
 
 import lombok.Data;
 
 @Data
-public class Weather {
+public class MainWeatherDto {
 
     private long id;
     private String main;

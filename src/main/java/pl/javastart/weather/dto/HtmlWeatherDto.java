@@ -1,13 +1,12 @@
-package pl.javastart.weather.jsonClass;
+package pl.javastart.weather.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 @Data
 @Builder
-public class WeatherDto {
+public class HtmlWeatherDto {
     private String town;
 
     private String cloudCover;
